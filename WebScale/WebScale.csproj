@@ -1,0 +1,55 @@
+﻿<!--EXTERNAL_PROPERTIES: GITHUB_ACTIONS-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>0.0.0-SNAPSHOT1</Version>
+        <Authors>Ben Hutchison</Authors>
+        <Company>Ben Hutchison</Company>
+        <PackageId>WebScale</PackageId>
+        <Product>WebScale</Product>
+        <Description>Client for the Stamps.com Stainless Steel 5 lb. Digital Scale</Description>
+        <Copyright>© 2023 Ben Hutchison</Copyright>
+        <PackageProjectUrl>https://github.com/Aldaviva/WebScale.net</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Aldaviva/WebScale.net.git</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageTags>usb hid postage scale stamps.com weigh weight mass</PackageTags>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
+        <!-- <PackageIcon>icon.jpg</PackageIcon> -->
+
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IncludeSource>true</IncludeSource>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <RootNamespace>Aldaviva.WebScale</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HidClient" Version="1.0.1" />
+        <PackageReference Include="UnitsNet" Version="5.11.0" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="ExceptionAdjustments.txt" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="ExceptionAdjustments.txt" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true' or '$(Configuration)' == 'Release'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="Tests" />
+    </ItemGroup>
+
+</Project>
