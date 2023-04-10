@@ -2,21 +2,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>0.0.0-SNAPSHOT1</Version>
+        <Version>0.0.0-SNAPSHOT2</Version>
         <Authors>Ben Hutchison</Authors>
         <Company>Ben Hutchison</Company>
         <PackageId>WebScale</PackageId>
         <Product>WebScale</Product>
-        <Description>Client for the Stamps.com Stainless Steel 5 lb. Digital Scale</Description>
+        <Description>Measure weight using a Stamps.com digital USB postage scale</Description>
         <Copyright>© 2023 Ben Hutchison</Copyright>
         <PackageProjectUrl>https://github.com/Aldaviva/WebScale.net</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Aldaviva/WebScale.net.git</RepositoryUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-        <PackageTags>usb hid postage scale stamps.com weigh weight mass</PackageTags>
+        <PackageTags>usb hid postage scale stamps stamps.com weigh weight mass</PackageTags>
         <PackageReadmeFile>Readme.md</PackageReadmeFile>
-        <!-- <PackageIcon>icon.jpg</PackageIcon> -->
+        <PackageIcon>icon.jpg</PackageIcon>
 
         <TargetFramework>netstandard2.0</TargetFramework>
         <Nullable>enable</Nullable>
@@ -38,6 +38,8 @@
 
     <ItemGroup>
         <None Remove="ExceptionAdjustments.txt" />
+        <None Include="..\Readme.md" Pack="true" PackagePath="\" />
+        <None Include="icon.jpg" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>

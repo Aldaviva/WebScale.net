@@ -6,7 +6,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
+        <LangVersion>latest</LangVersion>
+        <RollForward>major</RollForward>
+        <Product>WebScale Sample</Product>
+        <AssemblyTitle>WebScale Sample</AssemblyTitle>
+        <Company>Ben Hutchison</Company>
+        <Copyright>© 2023 Ben Hutchison</Copyright>
+        <ApplicationIcon>webscale.ico</ApplicationIcon>
     </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="webscale.ico" />
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\WebScale\WebScale.csproj" />

@@ -4,22 +4,45 @@ using UnitsNet;
 
 namespace Aldaviva.WebScale;
 
+/// <summary>
+/// <para>Primary class of the <c>WebScale</c> package.</para>
+/// <para>To get started, construct a new instance of <see cref="WebScale"/>, then listen for the <see cref="WeightChanged"/> event.</para>
+/// <para>Example:</para>
+/// <para><c>using Aldaviva.WebScale;
+///
+/// using IWebScale webScale = new WebScale();
+/// webScale.WeightChanged += (sender, weight) => Console.WriteLine($"{weight.OunceForce,4:F1} oz.");</c></para>
+/// </summary>
 public class WebScale: AbstractHidClient, IWebScale {
 
     private static readonly byte[] TareCommand = { 0x04, 0x01 };
 
+    /// <inheritdoc />
     protected override int VendorId { get; } = 0x2474;
+
+    /// <inheritdoc />
     protected override int ProductId { get; } = 0x0550;
 
     /// <inheritdoc />
     public event EventHandler<Force>? WeightChanged;
 
     private Force                    _weight;
-    private CancellationTokenSource? _cancellationTokenSource = new();
+    private CancellationTokenSource? _disposalTokenSource = new();
 
     private readonly SemaphoreSlim _taring = new(1);
 
+    /// <summary>
+    /// <para>Create a new instance by finding a device attached to the local computer.</para>
+    /// <para>After constructing it, you can listen for <see cref="WeightChanged"/> events.</para>
+    /// <para>Remember to <see cref="Dispose"/> of this instance to disconnect from the device.</para>
+    /// </summary>
     public WebScale() { }
+
+    /// <summary>
+    /// <para>Create a new instance using a custom list of devices. Useful for unit test mocking.</para>
+    /// <para>After constructing it, you can listen for <see cref="WeightChanged"/> events.</para>
+    /// <para>Remember to <see cref="Dispose"/> of this instance to disconnect from the device.</para>
+    /// </summary>
     public WebScale(DeviceList deviceList): base(deviceList) { }
 
     /// <inheritdoc />
@@ -54,27 +77,34 @@ public class WebScale: AbstractHidClient, IWebScale {
         Weight = Force.FromOunceForce(BitConverter.ToInt16(readBuffer, 4) / 10.0);
     }
 
+    /// <inheritdoc />
     protected override void Dispose(bool disposing) {
         if (disposing) {
-            _cancellationTokenSource?.Cancel();
-            _cancellationTokenSource?.Dispose();
-            _cancellationTokenSource = null;
+            try {
+                _disposalTokenSource?.Cancel(false);
+            } catch (AggregateException) { }
+
+            _disposalTokenSource?.Dispose();
+            _disposalTokenSource = null;
             _taring.Dispose();
         }
 
         base.Dispose(disposing);
     }
 
+    /// <inheritdoc />
     public async Task Tare() {
-        if (DeviceStream is not null && _cancellationTokenSource?.Token is { } cancellationToken) {
-            await _taring.WaitAsync(cancellationToken).ConfigureAwait(false);
-
-            await DeviceStream.WriteAsync(TareCommand, 0, TareCommand.Length, cancellationToken).ConfigureAwait(false);
-
-            await _taring.WaitAsync(cancellationToken).ConfigureAwait(false);
+        if (DeviceStream is not null && _disposalTokenSource?.Token is { } disposalToken) {
             try {
-                _taring.Release();
-            } catch (SemaphoreFullException) { }
+                await _taring.WaitAsync(disposalToken).ConfigureAwait(false);
+
+                await DeviceStream.WriteAsync(TareCommand, 0, TareCommand.Length, disposalToken).ConfigureAwait(false);
+
+                await _taring.WaitAsync(disposalToken).ConfigureAwait(false);
+                try {
+                    _taring.Release();
+                } catch (SemaphoreFullException) { }
+            } catch (OperationCanceledException) { }
         }
     }
 

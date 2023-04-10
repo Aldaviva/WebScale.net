@@ -6,4 +6,4 @@
 # See ECMA-334, 5th Ed. § D.4.2 "ID string format" for a description of the ID format.
 
 P:System.Array.Length get -T:System.OverflowException
-M:System.IO.Stream.WriteAsync(System.Byte[],System.Int32,System.Int32) -T:System.NotSupportedException
+M:System.IO.Stream.WriteAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken) -T:System.NotSupportedException
