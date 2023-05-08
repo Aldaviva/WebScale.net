@@ -39,6 +39,7 @@ public class WebScale: AbstractHidClient, IWebScale {
     public WebScale() { }
 
     /// <summary>
+    /// <para>For normal library usage, you should call <see cref="WebScale()"/> instead.</para>
     /// <para>Create a new instance using a custom list of devices. Useful for unit test mocking.</para>
     /// <para>After constructing it, you can listen for <see cref="WeightChanged"/> events.</para>
     /// <para>Remember to <see cref="Dispose"/> of this instance to disconnect from the device.</para>
@@ -55,6 +56,7 @@ public class WebScale: AbstractHidClient, IWebScale {
 
             if (isTaring && isZeroed) {
                 try {
+                    // allow the waiting call to Tare() to proceed
                     _taring.Release();
                 } catch (SemaphoreFullException) { }
             }
@@ -96,12 +98,15 @@ public class WebScale: AbstractHidClient, IWebScale {
     public async Task Tare() {
         if (DeviceStream is not null && _disposalTokenSource?.Token is { } disposalToken) {
             try {
+                // if another call to Tare() has not yet finished, wait for it here
                 await _taring.WaitAsync(disposalToken).ConfigureAwait(false);
 
                 await DeviceStream.WriteAsync(TareCommand, 0, TareCommand.Length, disposalToken).ConfigureAwait(false);
 
+                // wait for OnHidRead() to set Weight to 0, which means we're done taring
                 await _taring.WaitAsync(disposalToken).ConfigureAwait(false);
                 try {
+                    // allow other queued calls to Tare() to proceed
                     _taring.Release();
                 } catch (SemaphoreFullException) { }
             } catch (OperationCanceledException) { }

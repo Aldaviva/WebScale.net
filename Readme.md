@@ -83,6 +83,8 @@ NuGet\Install-Package WebScale
 Construct a new `WebScale` instance.
 
 ```cs
+using Aldaviva.WebScale;
+
 using IWebScale webScale = new WebScale();
 ```
 
@@ -134,7 +136,7 @@ When you are done with this instance, call [`Dispose()`](https://learn.microsoft
 public void ExplicitlyDispose() {
     IWebScale webScale = new WebScale();
     // use webScale here
-    device.Dispose();
+    webScale.Dispose();
 }
 ```
 
