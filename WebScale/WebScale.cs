@@ -15,7 +15,8 @@ namespace Aldaviva.WebScale;
 /// </summary>
 public class WebScale: AbstractHidClient, IWebScale {
 
-    private static readonly byte[] TareCommand = { 0x04, 0x01 };
+    private static readonly byte[] TareCommand           = { 0x04, 0x01 };
+    private static readonly Force  WeightChangeTolerance = Force.FromOunceForce(0.05);
 
     /// <inheritdoc />
     protected override int VendorId { get; } = 0x2474;
@@ -51,8 +52,8 @@ public class WebScale: AbstractHidClient, IWebScale {
         get => _weight;
         internal set {
             bool isTaring = _taring.CurrentCount == 0;
-            bool isZeroed = value.Equals(Force.Zero, 0.05, ComparisonType.Absolute);
-            bool isChange = !_weight.Equals(value, 0.05, ComparisonType.Absolute);
+            bool isZeroed = value.Equals(Force.Zero, WeightChangeTolerance);
+            bool isChange = !_weight.Equals(value, WeightChangeTolerance);
 
             if (isTaring && isZeroed) {
                 try {

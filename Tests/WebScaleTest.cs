@@ -45,7 +45,7 @@ public class WebScaleTest {
 
         changeEventCount.Should().Be(1);
         mostRecentChangeEvent.Should().NotBeNull();
-        mostRecentChangeEvent!.Value.Equals(Force.FromOunceForce(2.0), 0.05, ComparisonType.Absolute).Should().BeTrue();
+        mostRecentChangeEvent!.Value.Equals(Force.FromOunceForce(2.0), Force.FromOunceForce(0.05)).Should().BeTrue();
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class WebScaleTest {
 
         changeEventCount.Should().Be(0);
         mostRecentChangeEvent.Should().BeNull();
-        webScale.Weight.Equals(Force.Zero, 0.05, ComparisonType.Absolute).Should().BeTrue();
+        webScale.Weight.Equals(Force.Zero, Force.FromOunceForce(0.05)).Should().BeTrue();
 
         A.CallTo(() => webScale.DeviceStreamTest.WriteAsync(A<byte[]>.That.IsSameSequenceAs(new byte[] { 0x04, 0x01 }), 0, 2, A<CancellationToken>._)).MustHaveHappened();
     }
