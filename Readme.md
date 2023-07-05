@@ -90,7 +90,7 @@ using IWebScale webScale = new WebScale();
 
 This connects to the first Stamps.com Stainless Steel 5 lb. Digital Scale found connected to the computer.
 
-If there is no suitable device connected, this will wait and connect when one appears. If the device disconnects, this will wait for it to reconnect and then automatically reestablish a connection.
+If there is no suitable device connected, this will wait asynchronously and connect when one appears. If the device disconnects, this will wait for it to reconnect and then automatically reestablish a connection.
 
 The `IsConnected` property shows whether or not the instance is currently connected to a scale. Updates to this property are indicated by the `IsConnectedChanged` event.
 
