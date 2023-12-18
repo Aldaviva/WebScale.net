@@ -33,7 +33,7 @@
     <ItemGroup>
         <PackageReference Include="HidClient" Version="1.0.1" />
         <PackageReference Include="UnitsNet" Version="5.38.2" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
